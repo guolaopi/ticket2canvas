@@ -34,9 +34,6 @@ ticket2canvas({
                 top: 20, // content's top margin to canvas, default is 0
             },
         ],
-    },
-    callback: bs64 => {
-        // callback function, return the Base64 string of canvas
     }
 };
 ```

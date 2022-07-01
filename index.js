@@ -70,39 +70,37 @@ async function cvsDarwCodes(items, ctx) {
     await Promise.all(drawPromises); // 等待所有图片绘制结束
 }
 
-export default function ticket2canvas(option) {
-    Promise.resolve(async () => {
-        const { el, json, showCanvas } = option;
-        let cvs;
-        if (!el) {
-            cvs = document.createElement("canvas");
-            if (!cvs) {
-                console.error(`${el} is undefined`);
-            }
-        } else {
-            cvs = document.getElementById(el.replace("#", ""));
-        }
+export default async function ticket2canvas(option) {
+    const { el, json, showCanvas } = option;
+    let cvs;
+    if (!el) {
+        cvs = document.createElement("canvas");
         if (!cvs) {
-            console.error("canvas element is undefined");
-            return;
+            console.error(`${el} is undefined`);
         }
-        if (showCanvas) {
-            document.body.appendChild(cvs);
-        }
-        cvs.width = json.width || 300;
-        cvs.height = json.height || 600;
-        const ctx = cvs.getContext("2d");
-        const textList = json.list.filter((p) => p.type == "text");
-        cvsDrawText(textList, ctx);
+    } else {
+        cvs = document.getElementById(el.replace("#", ""));
+    }
+    if (!cvs) {
+        console.error("canvas element is undefined");
+        return;
+    }
+    if (showCanvas) {
+        document.body.appendChild(cvs);
+    }
+    cvs.width = json.width || 300;
+    cvs.height = json.height || 600;
+    const ctx = cvs.getContext("2d");
+    const textList = json.list.filter((p) => p.type == "text");
+    cvsDrawText(textList, ctx);
 
-        const codeList = json.list.filter(
-            (p) => p.type == "barcode" || p.type == "qrcode"
-        );
-        await cvsDarwCodes(codeList, ctx);
-        const bs64 = cvs.toDataURL("image/png", 0.8); // 转换为base64字符串
-        
-        if (option.callback) option.callback(bs64);
-    });
+    const codeList = json.list.filter(
+        (p) => p.type == "barcode" || p.type == "qrcode"
+    );
+    await cvsDarwCodes(codeList, ctx);
+
+    const bs64 = cvs.toDataURL("image/png", 0.8); // 转换为base64字符串
+    return bs64;
 }
 
 window.ticket2canvas = ticket2canvas;
