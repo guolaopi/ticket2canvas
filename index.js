@@ -11,11 +11,16 @@ function cvsDrawText(items, ctx) {
             fontStyle = "normal bold " + fontStyle; // 加粗
         }
         ctx.font = fontStyle;
-        ctx.fillText(
-            p.content,
-            parseInt(p.left),
-            parseInt(p.top) + parseInt(p.height) * 0.8
-        );
+
+        // 计算绘制文字的top，如果未设置高度，则以fontSize作为高度
+        let top = parseInt(p.top);
+        if (p.height) {
+            top += parseInt(p.height) * 0.8;
+        } else {
+            top += fontSize * 0.8;
+        }
+        
+        ctx.fillText(p.content, parseInt(p.left), top);
     });
 }
 
