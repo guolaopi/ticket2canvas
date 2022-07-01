@@ -1,6 +1,6 @@
 {
     "name": "ticket2canvas",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "description": "Paint ticket in canvas and you can export it as Base64 string",
     "main": "index.js",
     "scripts": {

@@ -8,8 +8,8 @@ function cvsDrawLine(items, ctx) {
         ctx.fillRect(
             parseInt(p.left),
             parseInt(p.top),
-            height,
-            parseInt(p.width)
+            parseInt(p.width),
+            height
         );
     });
 }
@@ -119,7 +119,6 @@ export default async function ticket2canvas(option) {
         (p) => p.type == "barcode" || p.type == "qrcode"
     );
     await cvsDarwCodes(codeList, ctx);
-
 
     const bs64 = cvs.toDataURL("image/png", 0.8); // 转换为base64字符串
     return bs64;
