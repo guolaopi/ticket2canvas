@@ -35,5 +35,8 @@ ticket2canvas({
             },
         ],
     },
+    callback: bs64 => {
+        // callback function, return the Base64 string of canvas
+    }
 };
 ```
