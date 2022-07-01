@@ -1,6 +1,19 @@
 import JsBarcode from "jsbarcode";
 import QRcode from "qrcode";
 
+// 绘制线
+function cvsDrawLine(items, ctx) {
+    items.forEach((p) => {
+        const height = parseInt(p.height) || 1;
+        ctx.fillRect(
+            parseInt(p.left),
+            parseInt(p.top),
+            height,
+            parseInt(p.width)
+        );
+    });
+}
+
 // 绘制打印的文字
 function cvsDrawText(items, ctx) {
     items.forEach((p) => {
@@ -19,7 +32,7 @@ function cvsDrawText(items, ctx) {
         } else {
             top += fontSize * 0.8;
         }
-        
+
         ctx.fillText(p.content, parseInt(p.left), top);
     });
 }
@@ -76,7 +89,7 @@ async function cvsDarwCodes(items, ctx) {
 }
 
 export default async function ticket2canvas(option) {
-    const { el, json, showCanvas } = option;
+    const { el, printData, showCanvas } = option;
     let cvs;
     if (!el) {
         cvs = document.createElement("canvas");
@@ -93,16 +106,20 @@ export default async function ticket2canvas(option) {
     if (showCanvas) {
         document.body.appendChild(cvs);
     }
-    cvs.width = json.width || 300;
-    cvs.height = json.height || 600;
+    cvs.width = printData.width || 300;
+    cvs.height = printData.height || 600;
     const ctx = cvs.getContext("2d");
-    const textList = json.list.filter((p) => p.type == "text");
+    const textList = printData.list.filter((p) => p.type == "text");
     cvsDrawText(textList, ctx);
 
-    const codeList = json.list.filter(
+    const lineList = printData.list.filter((p) => p.type == "line");
+    cvsDrawLine(lineList, ctx);
+
+    const codeList = printData.list.filter(
         (p) => p.type == "barcode" || p.type == "qrcode"
     );
     await cvsDarwCodes(codeList, ctx);
+
 
     const bs64 = cvs.toDataURL("image/png", 0.8); // 转换为base64字符串
     return bs64;
