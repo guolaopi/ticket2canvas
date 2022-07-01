@@ -37,3 +37,7 @@ ticket2canvas({
     }
 };
 ```
+
+# live demo
+
+This is a live demo: [ticket2canvas-demo](https://guolaopi.github.io/ticket2canvas-demo/)
